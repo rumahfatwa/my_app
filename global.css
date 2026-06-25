@@ -1,0 +1,15 @@
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css";
+
+@import "nativewind/theme";
+
+@theme {
+  --color-santas-gray: #a3a3aa;
+  --color-cobalt: #0041c8;
+  --color-cod-gray: #1c1b1b;
+  --color-scorpion: #5f5e5e;
+  --color-gun-powder: #434656;
+  --color-secondary: #f6f3f2;
+  --color-vista-white: #fcf9f8;
+}

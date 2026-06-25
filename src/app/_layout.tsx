@@ -1,15 +1,33 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import { useColorScheme } from 'react-native';
+import { Stack } from "expo-router";
+import { ClerkProvider } from "@clerk/expo";
+import "../../global.css";
+import { Platform } from "react-native";
+import { useEffect } from "react";
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+if (!publishableKey) {
+  throw new Error("Add your Clerk Publishable Key to the .env file");
+}
+
+export default function RootLayout() {
+  useEffect(() => {
+    if (Platform.OS === "web" && typeof document !== "undefined") {
+      const el = document.createElement("div");
+      el.id = "clerk-captcha";
+      document.body.appendChild(el);
+    }
+  }, []);
+
+  const getTokenCache = () => {
+    if (Platform.OS === "web") return undefined;
+    const { tokenCache } = require("@clerk/expo/token-cache");
+    return tokenCache;
+  };
+
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <ClerkProvider publishableKey={publishableKey} tokenCache={getTokenCache()}>
+      <Stack />
+    </ClerkProvider>
   );
 }
