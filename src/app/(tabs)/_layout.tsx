@@ -1,23 +1,19 @@
-import { Tabs, Redirect } from "expo-router";
+import { Tabs } from "expo-router";
 import { useAuth } from "@clerk/expo";
 import { Ionicons } from "@expo/vector-icons";
 import "../../../global.css";
 
 export default function TabsLayout() {
-  const { isSignedIn, isLoaded } = useAuth();
+  const { isLoaded } = useAuth();
 
   if (!isLoaded) {
     return null;
   }
 
-  if (!isSignedIn) {
-    return <Redirect href="/(auth)/sign-up" />;
-  }
-
   return (
     <Tabs screenOptions={{ 
       tabBarActiveTintColor: "#0041c8",
-      headerShown: false // Ubah ke true jika ingin menampilkan header
+      headerShown: false
     }}>
       <Tabs.Screen 
         name="index" 
@@ -38,7 +34,7 @@ export default function TabsLayout() {
         }} 
       />
       <Tabs.Screen 
-        name="wishlist" 
+        name="Wishlist" 
         options={{ 
           title: 'Wishlist',
           tabBarIcon: ({ color, focused }) => (
