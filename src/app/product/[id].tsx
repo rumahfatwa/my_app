@@ -13,13 +13,23 @@ import { IProduct } from "../../../types/product";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import RatingStart from "@/components/RatingStart";
+import useProductStore from "../../../store/useProductStore";
+import QuantityButton from "@/components/QuantitiyButton";
 
 const ProductDetail = () => {
   const { id } = useLocalSearchParams();
   const [product, setProduct] = useState<IProduct | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const {cart, addToCart} = useProductStore()
 
+
+  const handleAddToCart = async () =>{
+    
+      if(product){
+        addToCart({product, quantity: 1})
+      }
+  }
   const toggleWishList = async () => {
     try {
       const previous = isWishlisted;
@@ -138,12 +148,15 @@ const ProductDetail = () => {
             {product?.decription}
           </Text>
 
-          <Pressable className="min-w-full bg-cobalt rounded-lg py-6 items-center justify-center flex-row gap-2 mt-10">
+          {cart.some((item) => item.product.id === Number(id))  && product ? <QuantityButton product = {product} className = "w-full mt-8 justify-between "/>: 
+          <Pressable  onPress={handleAddToCart}  className="min-w-full bg-cobalt rounded-lg py-6 items-center justify-center flex-row gap-2 mt-10">
             <Ionicons name="bag" size={20} color="white" />
             <Text className="text-white tracking-[0.2em] uppercase font-bold text-base">
               Add To Cart
             </Text>
-          </Pressable>
+          </Pressable> }
+
+         
         </View>
       </ScrollView>
     </SafeAreaView>
